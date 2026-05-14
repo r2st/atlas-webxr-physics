@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATLAS — WebXR Physics Simulator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0f;
+      color: #d4a826;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+    #info {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      text-align: center;
+      pointer-events: none;
+    }
+    #info h1 {
+      font-size: 14px;
+      letter-spacing: 4px;
+      color: #d4a826;
+      text-transform: uppercase;
+    }
+    #info p {
+      font-size: 11px;
+      color: #8a8a6a;
+      margin-top: 4px;
+    }
+    #controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    button.sim-btn {
+      background: rgba(212, 168, 38, 0.1);
+      border: 1px solid rgba(212, 168, 38, 0.3);
+      color: #d4a826;
+      padding: 8px 18px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button.sim-btn:hover, button.sim-btn.active {
+      background: rgba(212, 168, 38, 0.25);
+      border-color: #d4a826;
+    }
+    #vr-button {
+      background: rgba(212, 168, 38, 0.2);
+      border: 2px solid #d4a826;
+      color: #d4a826;
+      padding: 12px 28px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+    }
+    #vr-button:hover {
+      background: rgba(212, 168, 38, 0.4);
+      box-shadow: 0 0 20px rgba(212, 168, 38, 0.3);
+    }
+    #vr-button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    #hud-left, #hud-right {
+      position: absolute;
+      top: 80px;
+      z-index: 100;
+      pointer-events: none;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+    #hud-left { left: 20px; }
+    #hud-right { right: 20px; text-align: right; }
+    .hud-label { color: #8a8a6a; }
+    .hud-value { color: #d4a826; font-weight: bold; }
+    .hud-title {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #d4a826;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(212, 168, 38, 0.2);
+      padding-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="info">
+    <h1>ATLAS-01 // WebXR Physics</h1>
+    <p>Immersive 3D Particle Simulation</p>
+  </div>
+
+  <div id="hud-left">
+    <div class="hud-title">PHYSICAL CONSTANTS</div>
+    <div><span class="hud-label">Gravitational G: </span><span class="hud-value" id="hud-g">7.675e-11</span></div>
+    <div><span class="hud-label">Particle Mass: </span><span class="hud-value">1.44e-27 kg</span></div>
+    <div><span class="hud-label">Particle Count: </span><span class="hud-value" id="hud-count">1200</span></div>
+    <div><span class="hud-label">Mode: </span><span class="hud-value" id="hud-mode">Gravity</span></div>
+  </div>
+
+  <div id="hud-right">
+    <div class="hud-title">TELEMETRY</div>
+    <div><span class="hud-label">Mean Velocity: </span><span class="hud-value" id="hud-vel">0.00</span><span class="hud-label"> m/s</span></div>
+    <div><span class="hud-label">Total Energy: </span><span class="hud-value" id="hud-energy">0.00</span><span class="hud-label"> J</span></div>
+    <div><span class="hud-label">FPS: </span><span class="hud-value" id="hud-fps">0</span></div>
+  </div>
+
+  <button id="vr-button" disabled>Checking VR...</button>
+
+  <div id="controls">
+    <button class="sim-btn active" data-mode="gravity">Gravity</button>
+    <button class="sim-btn" data-mode="electromagnetism">Electromagnetism</button>
+    <button class="sim-btn" data-mode="fluid">Fluid Dynamics</button>
+    <button class="sim-btn" data-mode="quantum">Quantum State</button>
+    <span style="color: #555; margin: 0 8px;">|</span>
+    <button class="sim-btn" data-preset="singularity">Singularity</button>
+    <button class="sim-btn" data-preset="binary">Binary Orbit</button>
+    <button class="sim-btn" data-preset="lagrange">Lagrange</button>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
